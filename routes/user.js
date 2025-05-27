@@ -3,6 +3,7 @@ const {userModel} = require("../db");
 const userRouter = Router(); //this is the router technique which will get trigger when any path starting from user comes
 const jwt = require("jsonwebtoken");
 const {JWT_USER_PASSWORD}=require("../config");
+const {userMiddleware} = require("../middlewares/user");
 
 userRouter.post("/signup",async function(req, res) {
     const {email,password,firstName,lastName}=req.body;
@@ -38,7 +39,7 @@ userRouter.post("/signin",async function(req, res) {
     
 });
 
-userRouter.get("/purchases", function(req, res) {
+userRouter.get("/purchases",userMiddleware,async function(req, res) {
     res.json({
         message: "signup endpoint"
     })

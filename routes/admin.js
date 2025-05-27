@@ -5,6 +5,8 @@ const {courseModel} = require("../db");
 const jwt = require("jsonwebtoken");
 const {JWT_ADMIN_PASSWORD}=require("../config");
 const { adminMiddleware } = require("../middlewares/admin");
+const course = require("./course");
+const admin = require("../middlewares/admin");
 
 adminRouter.post("/signup", async function(req, res) {
     const {email,password,firstName,lastName}= req.body;
@@ -54,15 +56,32 @@ adminRouter.post("/course",adminMiddleware, async function(req, res) {
     })
 })
 
-adminRouter.put("/course", function(req, res) {
+adminRouter.put("/course", adminMiddleware,async function(req, res) {
+    const adminId=req.userId;
+    const {title,description,imageUrl,price,courseId}=req.body;
+    const course=await courseModel.updateOne({
+        _id:courseId,
+        createrId:adminId //this is to verify if the adminId who is asking permission to change the course details is same
+        //who have created the course
+    },{
+        title:title,
+        description:description,
+        imageUrl:imageUrl,
+        price:price
+    })
     res.json({
-        message: "signup endpoint"
+        message:"course updated!!"
     })
 })
 
-adminRouter.get("/course/bulk", function(req, res) {
+adminRouter.get("/course/bulk",adminMiddleware,async function(req, res) {
+    const adminId=req.userId;
+    const courses=await courseModel.find({
+        createrId:adminId
+    })
     res.json({
-        message: "signup endpoint"
+        message:"courses are following",
+        courses
     })
 })
 
