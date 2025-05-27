@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {userModel} = require("../db");
+const {userModel, purchaseModel} = require("../db");
 const userRouter = Router(); //this is the router technique which will get trigger when any path starting from user comes
 const jwt = require("jsonwebtoken");
 const {JWT_USER_PASSWORD}=require("../config");
@@ -40,8 +40,16 @@ userRouter.post("/signin",async function(req, res) {
 });
 
 userRouter.get("/purchases",userMiddleware,async function(req, res) {
+    const userId=req.userId;
+    const purchases = await purchaseModel.find({
+        userId:userId
+    })
+    const coursedata=await courseModel.find({
+        _id:{$in:purchases.map(x=>x.courseId)} //this is to find the course among the array which is purchases.map(x=>x.courseId)
+    })
     res.json({
-        message: "signup endpoint"
+        message: "all courses purchased by user",
+        coursedata
     })
 })
 
