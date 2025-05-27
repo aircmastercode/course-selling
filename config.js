@@ -1,0 +1,6 @@
+const JWT_USER_PASSWORD="helloosecurity";
+const JWT_ADMIN_PASSWORD="helloadmin";
+module.exports={
+    JWT_USER_PASSWORD:JWT_USER_PASSWORD,
+    JWT_ADMIN_PASSWORD:JWT_ADMIN_PASSWORD
+}

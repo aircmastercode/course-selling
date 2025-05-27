@@ -2,7 +2,7 @@ const { Router } = require("express");
 const {userModel} = require("../db");
 const userRouter = Router(); //this is the router technique which will get trigger when any path starting from user comes
 const jwt = require("jsonwebtoken");
-const JWT_USER_PASSWORD="helloosecurity";
+const {JWT_USER_PASSWORD}=require("../config");
 
 userRouter.post("/signup",async function(req, res) {
     const {email,password,firstName,lastName}=req.body;
